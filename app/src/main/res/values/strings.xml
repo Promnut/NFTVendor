@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NFTProject</string>
+
+    <string name="hyperlink"><a href="https://app.pinata.cloud/signin">How to get CID</a></string>
+</resources>
