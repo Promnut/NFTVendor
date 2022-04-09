@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">NFTProject</string>
+    <string name="app_name">NFTVendor</string>
 
     <string name="hyperlink"><a href="https://app.pinata.cloud/signin">How to get CID</a></string>
+
+    <string name="etherScanHyperlink"><a href="https://goerli.etherscan.io/address/0x25761218c0153f060eC2959167C0029E611a73Fd">Open Transactions</a></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

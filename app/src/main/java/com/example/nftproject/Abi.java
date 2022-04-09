@@ -2,15 +2,11 @@ package com.example.nftproject;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
-import jnr.ffi.Struct;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import org.bouncycastle.util.encoders.UTF8;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
@@ -46,20 +42,6 @@ public class Abi extends Contract {
 
     public static final String FUNC_APPROVE = "approve";
 
-    public static final String FUNC_PAYTOMINT = "payToMint";
-
-    public static final String FUNC_RENOUNCEOWNERSHIP = "renounceOwnership";
-
-    public static final String FUNC_SAFEMINT = "safeMint";
-
-    public static final String FUNC_safeTransferFrom = "safeTransferFrom";
-
-    public static final String FUNC_SETAPPROVALFORALL = "setApprovalForAll";
-
-    public static final String FUNC_TRANSFERFROM = "transferFrom";
-
-    public static final String FUNC_TRANSFEROWNERSHIP = "transferOwnership";
-
     public static final String FUNC_BALANCEOF = "balanceOf";
 
     public static final String FUNC_COUNT = "count";
@@ -76,11 +58,23 @@ public class Abi extends Contract {
 
     public static final String FUNC_OWNEROF = "ownerOf";
 
+    public static final String FUNC_RENOUNCEOWNERSHIP = "renounceOwnership";
+
+    public static final String FUNC_SAFEMINT = "safeMint";
+
+    public static final String FUNC_safeTransferFrom = "safeTransferFrom";
+
+    public static final String FUNC_SETAPPROVALFORALL = "setApprovalForAll";
+
     public static final String FUNC_SUPPORTSINTERFACE = "supportsInterface";
 
     public static final String FUNC_SYMBOL = "symbol";
 
     public static final String FUNC_TOKENURI = "tokenURI";
+
+    public static final String FUNC_TRANSFERFROM = "transferFrom";
+
+    public static final String FUNC_TRANSFEROWNERSHIP = "transferOwnership";
 
     public static final Event APPROVAL_EVENT = new Event("Approval", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>(true) {}));
@@ -186,15 +180,6 @@ public class Abi extends Contract {
         return approvalForAllEventFlowable(filter);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> approve(String to, BigInteger tokenId) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_APPROVE, 
-                Arrays.<Type>asList(new Address(160, to),
-                new Uint256(tokenId)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
     public List<OwnershipTransferredEventResponse> getOwnershipTransferredEvents(TransactionReceipt transactionReceipt) {
         List<EventValuesWithLog> valueList = extractEventParametersWithLog(OWNERSHIPTRANSFERRED_EVENT, transactionReceipt);
         ArrayList<OwnershipTransferredEventResponse> responses = new ArrayList<OwnershipTransferredEventResponse>(valueList.size());
@@ -226,62 +211,6 @@ public class Abi extends Contract {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(OWNERSHIPTRANSFERRED_EVENT));
         return ownershipTransferredEventFlowable(filter);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> payToMint(String recipient, String metadataURI) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_PAYTOMINT, 
-                Arrays.<Type>asList(new Address(160, recipient),
-                new Utf8String(metadataURI)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> renounceOwnership() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_RENOUNCEOWNERSHIP, 
-                Arrays.<Type>asList(), 
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> safeMint(String to, String uri) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SAFEMINT, 
-                Arrays.<Type>asList(new Address(160, to),
-                new Utf8String(uri)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> safeTransferFrom(String from, String to, BigInteger tokenId) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_safeTransferFrom, 
-                Arrays.<Type>asList(new Address(160, from),
-                new Address(160, to),
-                new Uint256(tokenId)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> safeTransferFrom(String from, String to, BigInteger tokenId, byte[] _data) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_safeTransferFrom, 
-                Arrays.<Type>asList(new Address(160, from),
-                new Address(160, to),
-                new Uint256(tokenId),
-                new org.web3j.abi.datatypes.DynamicBytes(_data)), 
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> setApprovalForAll(String operator, Boolean approved) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETAPPROVALFORALL, 
-                Arrays.<Type>asList(new Address(160, operator),
-                new Bool(approved)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
     }
 
     public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
@@ -319,20 +248,11 @@ public class Abi extends Contract {
         return transferEventFlowable(filter);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> transferFrom(String from, String to, BigInteger tokenId) {
+    public RemoteFunctionCall<TransactionReceipt> approve(String to, BigInteger tokenId) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_TRANSFERFROM, 
-                Arrays.<Type>asList(new Address(160, from),
-                new Address(160, to),
+                FUNC_APPROVE, 
+                Arrays.<Type>asList(new Address(160, to),
                 new Uint256(tokenId)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> transferOwnership(String newOwner) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_TRANSFEROWNERSHIP, 
-                Arrays.<Type>asList(new Address(160, newOwner)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -394,6 +314,53 @@ public class Abi extends Contract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
+    public RemoteFunctionCall<TransactionReceipt> renounceOwnership() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_RENOUNCEOWNERSHIP, 
+                Arrays.<Type>asList(), 
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> safeMint(String to, String uri) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_SAFEMINT, 
+                Arrays.<Type>asList(new Address(160, to),
+                new Utf8String(uri)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> safeTransferFrom(String from, String to, BigInteger tokenId) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_safeTransferFrom, 
+                Arrays.<Type>asList(new Address(160, from),
+                new Address(160, to),
+                new Uint256(tokenId)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> safeTransferFrom(String from, String to, BigInteger tokenId, byte[] _data) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_safeTransferFrom, 
+                Arrays.<Type>asList(new Address(160, from),
+                new Address(160, to),
+                new Uint256(tokenId),
+                new org.web3j.abi.datatypes.DynamicBytes(_data)), 
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> setApprovalForAll(String operator, Boolean approved) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_SETAPPROVALFORALL, 
+                Arrays.<Type>asList(new Address(160, operator),
+                new Bool(approved)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
     public RemoteFunctionCall<Boolean> supportsInterface(byte[] interfaceId) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_SUPPORTSINTERFACE, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceId)), 
@@ -413,6 +380,24 @@ public class Abi extends Contract {
                 Arrays.<Type>asList(new Uint256(tokenId)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> transferFrom(String from, String to, BigInteger tokenId) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_TRANSFERFROM, 
+                Arrays.<Type>asList(new Address(160, from),
+                new Address(160, to),
+                new Uint256(tokenId)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> transferOwnership(String newOwner) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_TRANSFEROWNERSHIP, 
+                Arrays.<Type>asList(new Address(160, newOwner)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
     }
 
     @Deprecated
